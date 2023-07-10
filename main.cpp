@@ -52,6 +52,21 @@ auto filter(const std::vector<T>& vec, Pred p) {
     return out;
 }
 
+template <typename T>
+auto filter(const std::vector<T>& vec, int val1) {
+    return filter(vec, [sval1 = std::to_string(val1)](const T &elem) { return elem[0] == sval1;});
+}
+
+template <typename T>
+auto filter(const std::vector<T>& vec, int val1, int val2) {
+    return filter(vec, [sval1 = std::to_string(val1), sval2 = std::to_string(val2)](const T &elem) { return elem[0] == sval1 && elem[1] == sval2;});
+}
+
+template <typename T>
+auto filter_any(const std::vector<T>& vec, int val_any) {
+    return filter(vec, [sval_any = std::to_string(val_any)](const T &elem) { return std::find(elem.begin(), elem.end(), sval_any) != elem.end();});
+}
+
 int main(int, char **)
 {
     try
@@ -74,13 +89,15 @@ int main(int, char **)
         out_ip_pool(ip_pool);
 
         // TODO filter by first byte and output
-        out_ip_pool(filter(ip_pool, [](const auto &elem) { return elem[0] == "1";}));
+        //out_ip_pool(filter(ip_pool, [](const auto &elem) { return elem[0] == "1";}));
+        out_ip_pool(filter(ip_pool,1));
 
         // TODO filter by first and second bytes and output
-        out_ip_pool(filter(ip_pool, [](const auto &elem) { return elem[0] == "46" && elem[1] == "70";}));
+        out_ip_pool(filter(ip_pool,46,70));
 
         // TODO filter by any byte and output
-        out_ip_pool(filter(ip_pool, [](const auto &elem) { return std::find(elem.begin(), elem.end(), "46") != elem.end();}));
+//        out_ip_pool(filter(ip_pool, [](const auto &elem) { return std::find(elem.begin(), elem.end(), "46") != elem.end();}));
+        out_ip_pool(filter_any(ip_pool,46));
 
     }
     catch(const std::exception &e)
